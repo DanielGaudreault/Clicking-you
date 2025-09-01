@@ -3,60 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thinking of You</title>
+    <title>Neon Thoughts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #6c5ce7;
-            --heart-color: #e84393;
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --neon-pink: #ff0a78;
+            --neon-blue: #00ddeb;
+            --neon-purple: #8b00ff;
+            --bg-dark: #1a1a2e;
+            --text-light: #e0e0ff;
+            --glow-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-purple);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Orbitron', sans-serif;
         }
 
         body {
-            background: var(--bg-gradient);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow-x: hidden;
         }
 
         .container {
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            background: rgba(26, 26, 46, 0.9);
+            border-radius: 20px;
+            box-shadow: var(--glow-shadow);
             width: 100%;
-            max-width: 550px;
+            max-width: 600px;
             padding: 40px;
             text-align: center;
             position: relative;
-            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--neon-blue);
         }
 
         h1 {
-            color: var(--primary-color);
-            font-size: 2.2rem;
-            margin-bottom: 12px;
+            color: var(--neon-pink);
+            font-size: 2.5rem;
             font-weight: 700;
+            text-shadow: 0 0 15px var(--neon-pink);
+            margin-bottom: 10px;
+            animation: neon-flicker 1.5s infinite alternate;
         }
 
         .subtitle {
-            color: #576574;
-            font-size: 1.1rem;
-            margin-bottom: 32px;
-            line-height: 1.5;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 5px var(--neon-blue);
         }
 
         .buttons-container {
             display: grid;
             gap: 30px;
-            margin-bottom: 32px;
+            margin-bottom: 30px;
         }
 
         .button-wrapper {
@@ -66,70 +75,80 @@
         }
 
         .person-name {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            color: #2d3436;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px var(--neon-blue);
+            margin-bottom: 10px;
         }
 
-        .heart-button {
-            width: 140px;
-            height: 140px;
+        .thought-button {
+            width: 160px;
+            height: 160px;
             border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, #fd79a8 0%, var(--heart-color) 100%);
-            color: white;
+            border: 2px solid var(--neon-purple);
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-blue));
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow-shadow);
             position: relative;
             overflow: hidden;
         }
 
-        .heart-button::before {
+        .thought-button::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
-        .heart-button:hover {
-            transform: scale(1.08);
-            box-shadow: 0 10px 25px rgba(232, 67, 147, 0.5);
+        .thought-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--neon-pink), 0 0 30px var(--neon-blue);
         }
 
-        .heart-button:hover::before {
+        .thought-button:hover::before {
             opacity: 1;
         }
 
-        .heart-button:active {
+        .thought-button:active {
             transform: scale(0.95);
         }
 
-        .heart-icon {
-            font-size: 48px;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        .thought-counter {
+            margin-top: 10px;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            text-shadow: 0 0 5px var(--neon-purple);
         }
 
         .indicator {
-            margin-top: 16px;
+            margin-top: 15px;
             padding: 12px 24px;
             border-radius: 50px;
-            background: #f8efba;
-            color: #2d3436;
+            background: rgba(255, 10, 120, 0.2);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
             font-weight: 500;
-            font-size: 0.95rem;
+            border: 1px solid var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
             opacity: 0;
             transform: translateY(20px);
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
         .indicator.active {
@@ -138,46 +157,37 @@
         }
 
         .instructions {
-            background: #f6f9fc;
+            background: rgba(59, 68, 75, 0.5);
             padding: 20px;
             border-radius: 12px;
-            margin-top: 24px;
+            margin-top: 30px;
             text-align: left;
-            font-size: 0.9rem;
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
         }
 
         .instructions h3 {
-            color: var(--primary-color);
+            color: var(--neon-pink);
+            font-size: 1.2rem;
             margin-bottom: 12px;
-            font-size: 1.1rem;
+            text-shadow: 0 0 5px var(--neon-pink);
         }
 
         .instructions p {
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
             margin-bottom: 10px;
-            color: #2d3436;
             line-height: 1.6;
         }
 
-        .pulse {
-            animation: pulse-animation 1.2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-animation {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 5px 15px rgba(232, 67, 147, 0.3);
-            }
-            50% {
-                transform: scale(1.1);
-                box-shadow: 0 10px 25px rgba(232, 67, 147, 0.5);
-            }
-        }
-
         .footer {
-            margin-top: 24px;
-            color: #576574;
+            margin-top: 30px;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
             opacity: 0.8;
+            text-shadow: 0 0 5px var(--neon-purple);
         }
 
         .theme-toggle {
@@ -186,36 +196,81 @@
             right: 20px;
             background: none;
             border: none;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: background 0.3s ease;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+            transition: transform 0.3s ease;
         }
 
         .theme-toggle:hover {
-            background: rgba(0, 0, 0, 0.05);
+            transform: scale(1.2);
         }
 
-        body.dark {
-            --bg-gradient: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+        body.classic {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
         }
 
-        body.dark .container {
-            background: #2d3436;
+        body.classic .container {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #6c5ce7;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
-        body.dark .person-name,
-        body.dark .instructions p {
-            color: #dfe6e9;
+        body.classic .person-name,
+        body.classic .instructions p,
+        body.classic .footer {
+            color: #2d3436;
+            text-shadow: none;
         }
 
-        body.dark .instructions {
-            background: #3b444b;
+        body.classic .thought-button {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            border: 2px solid #e84393;
+            box-shadow: 0 5px 15px rgba(232, 67, 147, 0.3);
         }
 
-        body.dark .footer {
-            color: #b2bec3;
+        body.classic h1 {
+            color: #6c5ce7;
+            text-shadow: none;
+        }
+
+        body.classic .subtitle {
+            color: #576574;
+            text-shadow: none;
+        }
+
+        body.classic .instructions {
+            background: #f6f9fc;
+            border: 1px solid #dfe6e9;
+            box-shadow: none;
+        }
+
+        body.classic .indicator {
+            background: #f8efba;
+            border: 1px solid #e84393;
+            color: #2d3436;
+            text-shadow: none;
+        }
+
+        @keyframes neon-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes pulse-animation {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: var(--glow-shadow);
+            }
+            50% {
+                transform: scale(1.15);
+                box-shadow: 0 0 25px var(--neon-pink), 0 0 35px var(--neon-blue);
+            }
+        }
+
+        .pulse {
+            animation: pulse-animation 1s ease-in-out infinite;
         }
 
         @media (max-width: 480px) {
@@ -223,13 +278,14 @@
                 padding: 24px;
             }
 
-            .heart-button {
-                width: 120px;
-                height: 120px;
+            h1 {
+                font-size: 2rem;
             }
 
-            h1 {
-                font-size: 1.8rem;
+            .thought-button {
+                width: 130px;
+                height: 130px;
+                font-size: 0.9rem;
             }
 
             .subtitle {
@@ -240,38 +296,37 @@
 </head>
 <body>
     <div class="container">
-        <button class="theme-toggle" id="themeToggle">🌙</button>
-        <h1>Thinking of You</h1>
-        <p class="subtitle">Send a heartfelt message to someone special</p>
+        <button class="theme-toggle" id="themeToggle">🌌</button>
+        <h1>Neon Thoughts</h1>
+        <p class="subtitle">Send a glowing message to someone special</p>
 
         <div class="buttons-container">
             <div class="button-wrapper">
                 <div class="person-name">Person A</div>
-                <button class="heart-button" id="buttonA">
-                    <div class="heart-icon">❤️</div>
-                </button>
-                <div class="indicator" id="indicatorB">Person B is thinking of you! 💖</div>
+                <button class="thought-button" id="buttonA">Send Thought</button>
+                <div class="thought-counter" id="counterB">Person B sent 0 thoughts</div>
+                <div class="indicator" id="indicatorB">Person B is thinking of you!</div>
             </div>
 
             <div class="button-wrapper">
                 <div class="person-name">Person B</div>
-                <button class="heart-button" id="buttonB">
-                    <div class="heart-icon">❤️</div>
-                </button>
-                <div class="indicator" id="indicatorA">Person A is thinking of you! 💖</div>
+                <button class="thought-button" id="buttonB">Send Thought</button>
+                <div class="thought-counter" id="counterA">Person A sent 0 thoughts</div>
+                <div class="indicator" id="indicatorA">Person A is thinking of you!</div>
             </div>
         </div>
 
         <div class="instructions">
             <h3>How It Works</h3>
-            <p>1. Press your button to let the other person know you're thinking of them.</p>
-            <p>2. They'll see a notification with a subtle animation and sound.</p>
-            <p>3. Notifications fade after 5 seconds.</p>
-            <p>4. Use two devices or browser tabs to test it out!</p>
+            <p>1. Click "Send Thought" to let the other person know you're thinking of them.</p>
+            <p>2. Their notification will glow until they view it.</p>
+            <p>3. Track how many thoughts you've sent with the counter.</p>
+            <p>4. Toggle between neon and classic themes with the button above.</p>
+            <p>5. Open on two devices or tabs to share thoughts instantly!</p>
         </div>
 
         <div class="footer">
-            Crafted with ❤️ by xAI | Open on multiple devices to share thoughts
+            Crafted with Passion by xAI | Share the Neon Vibe
         </div>
     </div>
 
@@ -281,75 +336,106 @@
             const buttonB = document.getElementById('buttonB');
             const indicatorA = document.getElementById('indicatorA');
             const indicatorB = document.getElementById('indicatorB');
+            const counterA = document.getElementById('counterA');
+            const counterB = document.getElementById('counterB');
             const themeToggle = document.getElementById('themeToggle');
 
             // Audio for notification
-            const notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3');
+            const notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-positive-notification-264.mp3');
+
+            // Initialize counters from localStorage
+            let personACount = parseInt(localStorage.getItem('personACount') || '0');
+            let personBCount = parseInt(localStorage.getItem('personBCount') || '0');
+            counterA.textContent = `Person A sent ${personACount} thoughts`;
+            counterB.textContent = `Person B sent ${personBCount} thoughts`;
 
             // Theme toggle
             themeToggle.addEventListener('click', () => {
-                document.body.classList.toggle('dark');
-                themeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-                localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+                document.body.classList.toggle('classic');
+                themeToggle.textContent = document.body.classList.contains('classic') ? '🌌' : '🌞';
+                localStorage.setItem('theme', document.body.classList.contains('classic') ? 'classic' : 'neon');
             });
 
             // Load saved theme
-            if (localStorage.getItem('theme') === 'dark') {
-                document.body.classList.add('dark');
-                themeToggle.textContent = '☀️';
+            if (localStorage.getItem('theme') === 'classic') {
+                document.body.classList.add('classic');
+                themeToggle.textContent = '🌌';
             }
 
             // Function to show notification
             function showNotification(indicator) {
                 indicator.classList.add('active');
                 notificationSound.play().catch(() => console.log('Audio playback failed'));
-                setTimeout(() => {
-                    indicator.classList.remove('active');
-                }, 5000);
+            }
+
+            // Function to hide notification
+            function hideNotification(indicator) {
+                indicator.classList.remove('active');
             }
 
             // Function to handle button press
-            function handleButtonPress(button, storageKey, indicator) {
+            function handleButtonPress(button, storageKey, counterKey, indicator, counterElement, otherPerson) {
                 button.classList.add('pulse');
-                const timestamp = Date.now();
+                personACount = storageKey === 'personAThinking' ? personACount + 1 : personACount;
+                personBCount = storageKey === 'personBThinking' ? personBCount + 1 : personBCount;
                 
-                // Save to localStorage with timestamp
-                localStorage.setItem(storageKey, JSON.stringify({
-                    timestamp,
-                    count: (JSON.parse(localStorage.getItem(storageKey))?.count || 0) + 1
-                }));
+                // Update counter
+                localStorage.setItem(counterKey, storageKey === 'personAThinking' ? personACount : personBCount);
+                counterElement.textContent = `${otherPerson} sent ${storageKey === 'personAThinking' ? personACount : personBCount} thoughts`;
+
+                // Save notification to localStorage
+                const notifications = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                notifications.push({ timestamp: Date.now(), viewed: false });
+                localStorage.setItem(storageKey, JSON.stringify(notifications));
 
                 setTimeout(() => {
                     button.classList.remove('pulse');
-                }, 1200);
+                }, 1000);
 
                 showNotification(indicator);
             }
 
+            // Check for notifications
+            function checkForNotifications() {
+                const personANotifications = JSON.parse(localStorage.getItem('personAThinking') || '[]');
+                const personBNotifications = JSON.parse(localStorage.getItem('personBThinking') || '[]');
+
+                // Show unviewed notifications for Person B
+                if (personANotifications.some(n => !n.viewed)) {
+                    showNotification(indicatorB);
+                }
+
+                // Show unviewed notifications for Person A
+                if (personBNotifications.some(n => !n.viewed)) {
+                    showNotification(indicatorA);
+                }
+            }
+
+            // Mark notifications as viewed
+            function markAsViewed(storageKey, indicator) {
+                const notifications = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                const updatedNotifications = notifications.map(n => ({ ...n, viewed: true }));
+                localStorage.setItem(storageKey, JSON.stringify(updatedNotifications));
+                hideNotification(indicator);
+            }
+
             // Add event listeners to buttons
             buttonA.addEventListener('click', () => {
-                handleButtonPress(buttonA, 'personAThinking', indicatorB);
+                handleButtonPress(buttonA, 'personAThinking', 'personACount', indicatorB, counterB, 'Person A');
             });
 
             buttonB.addEventListener('click', () => {
-                handleButtonPress(buttonB, 'personBThinking', indicatorA);
+                handleButtonPress(buttonB, 'personBThinking', 'personBCount', indicatorA, counterA, 'Person B');
             });
 
-            // Check for notifications
-            function checkForNotifications() {
-                const personAData = JSON.parse(localStorage.getItem('personAThinking'));
-                const personBData = JSON.parse(localStorage.getItem('personBThinking'));
+            // Add click listeners to indicators to mark as viewed
+            indicatorA.addEventListener('click', () => {
+                markAsViewed('personBThinking', indicatorA);
+            });
 
-                if (personAData && Date.now() - personAData.timestamp < 10000) {
-                    showNotification(indicatorB);
-                    localStorage.removeItem('personAThinking');
-                }
-
-                if (personBData && Date.now() - personBData.timestamp < 10000) {
-                    showNotification(indicatorA);
-                    localStorage.removeItem('personBThinking');
-                }
-            }
+            indicatorB.addEventListener('click', () => {
+                markAsViewed('personAThinking', indicatorB);
+            });
 
             // Check notifications every 500ms
             setInterval(checkForNotifications, 500);
