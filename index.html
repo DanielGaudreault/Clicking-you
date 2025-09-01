@@ -482,7 +482,7 @@
             <h3>How It Works</h3>
             <p>1. Enter names for Person A and Person B above.</p>
             <p>2. Click "Send Thought" to send a glowing message to the other person.</p>
-            <p>3. Notifications glow until clicked to dismiss.</p>
+            <p>3. The opposite person receives the notification, which glows until clicked to dismiss.</p>
             <p>4. See thoughts received in the counter and history below.</p>
             <p>5. Toggle sound, clear history, or reset all data with the buttons.</p>
             <p>6. Switch themes (neon/classic) and test on multiple devices!</p>
@@ -525,8 +525,8 @@
             nameB.value = personBName;
             displayNameA.textContent = personAName;
             displayNameB.textContent = personBName;
-            counterA.textContent = `Received ${personBToACount} thoughts from ${personAName}`;
-            counterB.textContent = `Received ${personAToBCount} thoughts from ${personBName}`;
+            counterB.textContent = `Received ${personBToACount} thoughts from ${personBName}`;
+            counterA.textContent = `Received ${personAToBCount} thoughts from ${personAName}`;
 
             // Particle animation
             const canvas = document.getElementById('particleCanvas');
@@ -609,7 +609,7 @@
                 personAName = nameA.value.trim() || 'Person A';
                 localStorage.setItem('personAName', personAName);
                 displayNameA.textContent = personAName;
-                counterA.textContent = `Received ${personBToACount} thoughts from ${personAName}`;
+                counterA.textContent = `Received ${personAToBCount} thoughts from ${personAName}`;
                 indicatorA.textContent = `${personAName} is thinking of you!`;
             });
 
@@ -617,7 +617,7 @@
                 personBName = nameB.value.trim() || 'Person B';
                 localStorage.setItem('personBName', personBName);
                 displayNameB.textContent = personBName;
-                counterB.textContent = `Received ${personAToBCount} thoughts from ${personBName}`;
+                counterB.textContent = `Received ${personBToACount} thoughts from ${personBName}`;
                 indicatorB.textContent = `${personBName} is thinking of you!`;
             });
 
@@ -657,7 +657,7 @@
 
                 // Update counter
                 localStorage.setItem(counterKey, storageKey === 'personAThinking' ? personAToBCount : personBToACount);
-                counterElement.textContent = `Received ${storageKey === 'personAThinking' ? personAToBCount : personBToACount} thoughts from ${receiverName}`;
+                counterElement.textContent = `Received ${storageKey === 'personAThinking' ? personAToBCount : personBToACount} thoughts from ${senderName}`;
 
                 // Save notification
                 const notifications = JSON.parse(localStorage.getItem(storageKey) || '[]');
@@ -681,11 +681,11 @@
                 const personBNotifications = JSON.parse(localStorage.getItem('personBThinking') || '[]');
 
                 if (personANotifications.some(n => !n.viewed)) {
-                    showNotification(indicatorB);
+                    showNotification(indicatorA);
                 }
 
                 if (personBNotifications.some(n => !n.viewed)) {
-                    showNotification(indicatorA);
+                    showNotification(indicatorB);
                 }
             }
 
@@ -721,8 +721,8 @@
                     nameB.value = personBName;
                     displayNameA.textContent = personAName;
                     displayNameB.textContent = personBName;
-                    counterA.textContent = `Received ${personBToACount} thoughts from ${personAName}`;
-                    counterB.textContent = `Received ${personAToBCount} thoughts from ${personBName}`;
+                    counterA.textContent = `Received ${personAToBCount} thoughts from ${personAName}`;
+                    counterB.textContent = `Received ${personBToACount} thoughts from ${personBName}`;
                     indicatorA.textContent = `${personAName} is thinking of you!`;
                     indicatorB.textContent = `${personBName} is thinking of you!`;
                     hideNotification(indicatorA);
@@ -733,19 +733,19 @@
 
             // Add event listeners
             buttonA.addEventListener('click', () => {
-                handleButtonPress(buttonA, 'personAThinking', 'personAToBCount', indicatorB, counterB, personAName, personBName);
+                handleButtonPress(buttonA, 'personAThinking', 'personAToBCount', indicatorA, counterA, personAName, personBName);
             });
 
             buttonB.addEventListener('click', () => {
-                handleButtonPress(buttonB, 'personBThinking', 'personBToACount', indicatorA, counterA, personBName, personAName);
+                handleButtonPress(buttonB, 'personBThinking', 'personBToACount', indicatorB, counterB, personBName, personAName);
             });
 
             indicatorA.addEventListener('click', () => {
-                markAsViewed('personBThinking', indicatorA);
+                markAsViewed('personAThinking', indicatorA);
             });
 
             indicatorB.addEventListener('click', () => {
-                markAsViewed('personAThinking', indicatorB);
+                markAsViewed('personBThinking', indicatorB);
             });
 
             // Keyboard accessibility
