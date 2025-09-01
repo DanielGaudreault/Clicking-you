@@ -7,12 +7,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-pink: #ff0a78;
-            --neon-blue: #00ddeb;
-            --neon-purple: #8b00ff;
-            --bg-dark: #1a1a2e;
-            --text-light: #e0e0ff;
-            --glow-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-purple);
+            --neon-pink: #ff1a8c;
+            --neon-blue: #00e6ff;
+            --neon-purple: #a200ff;
+            --neon-green: #00ff9f;
+            --bg-dark: #0f0c29;
+            --text-light: #e6e6ff;
+            --glow-shadow: 0 0 8px var(--neon-pink), 0 0 16px var(--neon-blue), 0 0 24px var(--neon-purple);
         }
 
         * {
@@ -23,49 +24,88 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background: linear-gradient(135deg, var(--bg-dark), #2b2659, #1f1f3b);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        canvas#particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
         }
 
         .container {
-            background: rgba(26, 26, 46, 0.9);
-            border-radius: 20px;
+            background: rgba(26, 26, 46, 0.85);
+            border-radius: 24px;
             box-shadow: var(--glow-shadow);
             width: 100%;
-            max-width: 600px;
-            padding: 40px;
+            max-width: 650px;
+            padding: 48px;
             text-align: center;
             position: relative;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
             border: 2px solid var(--neon-blue);
+            z-index: 1;
         }
 
         h1 {
             color: var(--neon-pink);
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
-            text-shadow: 0 0 15px var(--neon-pink);
-            margin-bottom: 10px;
-            animation: neon-flicker 1.5s infinite alternate;
+            text-shadow: 0 0 12px var(--neon-pink);
+            margin-bottom: 12px;
+            animation: neon-flicker 1.8s infinite alternate;
         }
 
         .subtitle {
             color: var(--text-light);
             font-family: 'Inter', sans-serif;
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            text-shadow: 0 0 5px var(--neon-blue);
+            font-size: 1.15rem;
+            margin-bottom: 32px;
+            text-shadow: 0 0 4px var(--neon-blue);
+            line-height: 1.6;
+        }
+
+        .name-inputs {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .name-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--neon-purple);
+            border-radius: 8px;
+            padding: 10px;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            width: 100%;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .name-input:focus {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 8px var(--neon-green);
         }
 
         .buttons-container {
             display: grid;
-            gap: 30px;
-            margin-bottom: 30px;
+            gap: 32px;
+            margin-bottom: 32px;
         }
 
         .button-wrapper {
@@ -75,21 +115,21 @@
         }
 
         .person-name {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 600;
-            color: var(--neon-blue);
-            text-shadow: 0 0 8px var(--neon-blue);
-            margin-bottom: 10px;
+            color: var(--neon-green);
+            text-shadow: 0 0 6px var(--neon-green);
+            margin-bottom: 12px;
         }
 
         .thought-button {
-            width: 160px;
-            height: 160px;
+            width: 170px;
+            height: 170px;
             border-radius: 50%;
-            border: 2px solid var(--neon-purple);
-            background: linear-gradient(135deg, var(--neon-pink), var(--neon-blue));
+            border: 3px solid transparent;
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-blue)) padding-box, linear-gradient(45deg, var(--neon-purple), var(--neon-green)) border-box;
             color: var(--text-light);
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
@@ -109,14 +149,14 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
         .thought-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px var(--neon-pink), 0 0 30px var(--neon-blue);
+            transform: scale(1.12);
+            box-shadow: 0 0 25px var(--neon-pink), 0 0 35px var(--neon-blue);
         }
 
         .thought-button:hover::before {
@@ -124,31 +164,32 @@
         }
 
         .thought-button:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
         }
 
         .thought-counter {
-            margin-top: 10px;
+            margin-top: 12px;
             color: var(--text-light);
             font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            text-shadow: 0 0 5px var(--neon-purple);
+            font-size: 0.95rem;
+            text-shadow: 0 0 4px var(--neon-purple);
         }
 
         .indicator {
-            margin-top: 15px;
-            padding: 12px 24px;
+            margin-top: 16px;
+            padding: 14px 28px;
             border-radius: 50px;
-            background: rgba(255, 10, 120, 0.2);
+            background: rgba(255, 26, 140, 0.25);
             color: var(--text-light);
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
             font-weight: 500;
             border: 1px solid var(--neon-pink);
-            text-shadow: 0 0 5px var(--neon-pink);
+            text-shadow: 0 0 4px var(--neon-pink);
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.5s ease, transform 0.5s ease;
+            cursor: pointer;
         }
 
         .indicator.active {
@@ -156,21 +197,72 @@
             transform: translateY(0);
         }
 
+        .history-log {
+            margin-top: 24px;
+            background: rgba(59, 68, 75, 0.5);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--neon-blue);
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-light);
+        }
+
+        .history-log h3 {
+            color: var(--neon-pink);
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            text-shadow: 0 0 4px var(--neon-pink);
+        }
+
+        .history-log p {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--text-light);
+            text-shadow: 0 0 3px var(--neon-blue);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .control-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--neon-green);
+            background: rgba(0, 255, 159, 0.2);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(0, 255, 159, 0.4);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
         .instructions {
             background: rgba(59, 68, 75, 0.5);
             padding: 20px;
             border-radius: 12px;
-            margin-top: 30px;
+            margin-top: 24px;
             text-align: left;
             border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 10px var(--neon-blue);
+            box-shadow: 0 0 8px var(--neon-blue);
         }
 
         .instructions h3 {
             color: var(--neon-pink);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 12px;
-            text-shadow: 0 0 5px var(--neon-pink);
+            text-shadow: 0 0 4px var(--neon-pink);
         }
 
         .instructions p {
@@ -182,12 +274,12 @@
         }
 
         .footer {
-            margin-top: 30px;
+            margin-top: 32px;
             color: var(--text-light);
             font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
             opacity: 0.8;
-            text-shadow: 0 0 5px var(--neon-purple);
+            text-shadow: 0 0 4px var(--neon-purple);
         }
 
         .theme-toggle {
@@ -196,10 +288,10 @@
             right: 20px;
             background: none;
             border: none;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             cursor: pointer;
             color: var(--neon-blue);
-            text-shadow: 0 0 5px var(--neon-blue);
+            text-shadow: 0 0 6px var(--neon-blue);
             transition: transform 0.3s ease;
         }
 
@@ -219,14 +311,17 @@
 
         body.classic .person-name,
         body.classic .instructions p,
-        body.classic .footer {
+        body.classic .footer,
+        body.classic .history-log p,
+        body.classic .thought-counter,
+        body.classic .name-input {
             color: #2d3436;
             text-shadow: none;
         }
 
         body.classic .thought-button {
-            background: linear-gradient(135deg, #fd79a8, #e84393);
-            border: 2px solid #e84393;
+            background: linear-gradient(135deg, #fd79a8, #e84393) padding-box, linear-gradient(45deg, #e84393, #fd79a8) border-box;
+            border: 3px solid transparent;
             box-shadow: 0 5px 15px rgba(232, 67, 147, 0.3);
         }
 
@@ -240,12 +335,6 @@
             text-shadow: none;
         }
 
-        body.classic .instructions {
-            background: #f6f9fc;
-            border: 1px solid #dfe6e9;
-            box-shadow: none;
-        }
-
         body.classic .indicator {
             background: #f8efba;
             border: 1px solid #e84393;
@@ -253,9 +342,36 @@
             text-shadow: none;
         }
 
+        body.classic .instructions,
+        body.classic .history-log {
+            background: #f6f9fc;
+            border: 1px solid #dfe6e9;
+            box-shadow: none;
+        }
+
+        body.classic .control-button {
+            background: rgba(108, 92, 231, 0.2);
+            border: 1px solid #6c5ce7;
+        }
+
+        body.classic .control-button:hover {
+            background: rgba(108, 92, 231, 0.4);
+            box-shadow: 0 0 10px #6c5ce7;
+        }
+
+        body.classic .name-input {
+            background: #f6f9fc;
+            border: 1px solid #6c5ce7;
+        }
+
+        body.classic .name-input:focus {
+            border-color: #e84393;
+            box-shadow: 0 0 8px #e84393;
+        }
+
         @keyframes neon-flicker {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            50% { opacity: 0.85; }
         }
 
         @keyframes pulse-animation {
@@ -264,65 +380,87 @@
                 box-shadow: var(--glow-shadow);
             }
             50% {
-                transform: scale(1.15);
-                box-shadow: 0 0 25px var(--neon-pink), 0 0 35px var(--neon-blue);
+                transform: scale(1.18);
+                box-shadow: 0 0 30px var(--neon-pink), 0 0 40px var(--neon-blue);
             }
         }
 
         .pulse {
-            animation: pulse-animation 1s ease-in-out infinite;
+            animation: pulse-animation 0.9s ease-in-out infinite;
         }
 
         @media (max-width: 480px) {
             .container {
-                padding: 24px;
+                padding: 32px;
             }
 
             h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
 
             .thought-button {
-                width: 130px;
-                height: 130px;
-                font-size: 0.9rem;
+                width: 140px;
+                height: 140px;
+                font-size: 0.95rem;
             }
 
             .subtitle {
                 font-size: 1rem;
             }
+
+            .name-inputs {
+                flex-direction: column;
+                gap: 12px;
+            }
         }
     </style>
 </head>
 <body>
+    <canvas id="particleCanvas"></canvas>
     <div class="container">
-        <button class="theme-toggle" id="themeToggle">🌌</button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌌</button>
         <h1>Neon Thoughts</h1>
         <p class="subtitle">Send a glowing message to someone special</p>
 
+        <div class="name-inputs">
+            <input type="text" class="name-input" id="nameA" placeholder="Person A" aria-label="Name for Person A">
+            <input type="text" class="name-input" id="nameB" placeholder="Person B" aria-label="Name for Person B">
+        </div>
+
         <div class="buttons-container">
             <div class="button-wrapper">
-                <div class="person-name">Person A</div>
-                <button class="thought-button" id="buttonA">Send Thought</button>
+                <div class="person-name" id="displayNameA">Person A</div>
+                <button class="thought-button" id="buttonA" aria-label="Send thought for Person A">Send Thought</button>
                 <div class="thought-counter" id="counterB">Person B sent 0 thoughts</div>
-                <div class="indicator" id="indicatorB">Person B is thinking of you!</div>
+                <div class="indicator" id="indicatorB" role="alert" aria-live="polite">Person B is thinking of you!</div>
             </div>
 
             <div class="button-wrapper">
-                <div class="person-name">Person B</div>
-                <button class="thought-button" id="buttonB">Send Thought</button>
+                <div class="person-name" id="displayNameB">Person B</div>
+                <button class="thought-button" id="buttonB" aria-label="Send thought for Person B">Send Thought</button>
                 <div class="thought-counter" id="counterA">Person A sent 0 thoughts</div>
-                <div class="indicator" id="indicatorA">Person A is thinking of you!</div>
+                <div class="indicator" id="indicatorA" role="alert" aria-live="polite">Person A is thinking of you!</div>
             </div>
+        </div>
+
+        <div class="history-log" id="historyLog">
+            <h3>Thought History</h3>
+            <div id="historyContent"></div>
+        </div>
+
+        <div class="controls">
+            <button class="control-button" id="toggleSound" aria-label="Toggle notification sound">Sound: On</button>
+            <button class="control-button" id="resetAll" aria-label="Reset all data">Reset All</button>
         </div>
 
         <div class="instructions">
             <h3>How It Works</h3>
-            <p>1. Click "Send Thought" to let the other person know you're thinking of them.</p>
-            <p>2. Their notification will glow until they view it.</p>
-            <p>3. Track how many thoughts you've sent with the counter.</p>
-            <p>4. Toggle between neon and classic themes with the button above.</p>
-            <p>5. Open on two devices or tabs to share thoughts instantly!</p>
+            <p>1. Enter names for Person A and Person B above.</p>
+            <p>2. Click "Send Thought" to send a glowing message.</p>
+            <p>3. Notifications stay until clicked to dismiss.</p>
+            <p>4. Track sent thoughts with the counter and view history below.</p>
+            <p>5. Toggle sound or reset data with the buttons.</p>
+            <p>6. Switch themes (neon/classic) and test on multiple devices!</p>
         </div>
 
         <div class="footer">
@@ -338,16 +476,88 @@
             const indicatorB = document.getElementById('indicatorB');
             const counterA = document.getElementById('counterA');
             const counterB = document.getElementById('counterB');
+            const nameA = document.getElementById('nameA');
+            const nameB = document.getElementById('nameB');
+            const displayNameA = document.getElementById('displayNameA');
+            const displayNameB = document.getElementById('displayNameB');
             const themeToggle = document.getElementById('themeToggle');
+            const toggleSound = document.getElementById('toggleSound');
+            const resetAll = document.getElementById('resetAll');
+            const historyContent = document.getElementById('historyContent');
 
             // Audio for notification
+            let soundEnabled = localStorage.getItem('soundEnabled') !== 'false';
             const notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-positive-notification-264.mp3');
+            toggleSound.textContent = `Sound: ${soundEnabled ? 'On' : 'Off'}`;
 
-            // Initialize counters from localStorage
+            // Initialize counters and names
             let personACount = parseInt(localStorage.getItem('personACount') || '0');
             let personBCount = parseInt(localStorage.getItem('personBCount') || '0');
-            counterA.textContent = `Person A sent ${personACount} thoughts`;
-            counterB.textContent = `Person B sent ${personBCount} thoughts`;
+            let personAName = localStorage.getItem('personAName') || 'Person A';
+            let personBName = localStorage.getItem('personBName') || 'Person B';
+            nameA.value = personAName;
+            nameB.value = personBName;
+            displayNameA.textContent = personAName;
+            displayNameB.textContent = personBName;
+            counterA.textContent = `${personAName} sent ${personACount} thoughts`;
+            counterB.textContent = `${personBName} sent ${personBCount} thoughts`;
+
+            // Particle animation
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const particles = [];
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 0.5 - 0.25;
+                    this.speedY = Math.random() * 0.5 - 0.25;
+                    this.color = `hsl(${Math.random() * 60 + 270}, 70%, 50%)`;
+                }
+
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    if (this.size > 0.2) this.size -= 0.01;
+                }
+
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            function initParticles() {
+                for (let i = 0; i < 50; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((particle, index) => {
+                    particle.update();
+                    particle.draw();
+                    if (particle.size <= 0.2) {
+                        particles.splice(index, 1);
+                        particles.push(new Particle());
+                    }
+                });
+                requestAnimationFrame(animateParticles);
+            }
+
+            initParticles();
+            animateParticles();
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
 
             // Theme toggle
             themeToggle.addEventListener('click', () => {
@@ -356,16 +566,56 @@
                 localStorage.setItem('theme', document.body.classList.contains('classic') ? 'classic' : 'neon');
             });
 
-            // Load saved theme
             if (localStorage.getItem('theme') === 'classic') {
                 document.body.classList.add('classic');
                 themeToggle.textContent = '🌌';
             }
 
+            // Sound toggle
+            toggleSound.addEventListener('click', () => {
+                soundEnabled = !soundEnabled;
+                toggleSound.textContent = `Sound: ${soundEnabled ? 'On' : 'Off'}`;
+                localStorage.setItem('soundEnabled', soundEnabled);
+            });
+
+            // Name input handling
+            nameA.addEventListener('input', () => {
+                personAName = nameA.value || 'Person A';
+                localStorage.setItem('personAName', personAName);
+                displayNameA.textContent = personAName;
+                counterA.textContent = `${personAName} sent ${personACount} thoughts`;
+                indicatorA.textContent = `${personAName} is thinking of you!`;
+            });
+
+            nameB.addEventListener('input', () => {
+                personBName = nameB.value || 'Person B';
+                localStorage.setItem('personBName', personBName);
+                displayNameB.textContent = personBName;
+                counterB.textContent = `${personBName} sent ${personBCount} thoughts`;
+                indicatorB.textContent = `${personBName} is thinking of you!`;
+            });
+
+            // Function to update history
+            function updateHistory(sender, timestamp) {
+                const history = JSON.parse(localStorage.getItem('thoughtHistory') || '[]');
+                const date = new Date(timestamp).toLocaleString();
+                history.unshift({ sender, timestamp, date });
+                if (history.length > 10) history.pop(); // Limit to 10 entries
+                localStorage.setItem('thoughtHistory', JSON.stringify(history));
+                renderHistory();
+            }
+
+            function renderHistory() {
+                const history = JSON.parse(localStorage.getItem('thoughtHistory') || '[]');
+                historyContent.innerHTML = history.length ? history.map(h => `<p>${h.sender} sent a thought at ${h.date}</p>`).join('') : '<p>No thoughts sent yet.</p>';
+            }
+
             // Function to show notification
             function showNotification(indicator) {
                 indicator.classList.add('active');
-                notificationSound.play().catch(() => console.log('Audio playback failed'));
+                if (soundEnabled) {
+                    notificationSound.play().catch(() => console.log('Audio playback failed'));
+                }
             }
 
             // Function to hide notification
@@ -374,23 +624,27 @@
             }
 
             // Function to handle button press
-            function handleButtonPress(button, storageKey, counterKey, indicator, counterElement, otherPerson) {
+            function handleButtonPress(button, storageKey, counterKey, indicator, counterElement, senderName, otherPersonName) {
                 button.classList.add('pulse');
                 personACount = storageKey === 'personAThinking' ? personACount + 1 : personACount;
                 personBCount = storageKey === 'personBThinking' ? personBCount + 1 : personBCount;
-                
+
                 // Update counter
                 localStorage.setItem(counterKey, storageKey === 'personAThinking' ? personACount : personBCount);
-                counterElement.textContent = `${otherPerson} sent ${storageKey === 'personAThinking' ? personACount : personBCount} thoughts`;
+                counterElement.textContent = `${otherPersonName} sent ${storageKey === 'personAThinking' ? personACount : personBCount} thoughts`;
 
-                // Save notification to localStorage
+                // Save notification
                 const notifications = JSON.parse(localStorage.getItem(storageKey) || '[]');
-                notifications.push({ timestamp: Date.now(), viewed: false });
+                const timestamp = Date.now();
+                notifications.push({ timestamp, viewed: false });
                 localStorage.setItem(storageKey, JSON.stringify(notifications));
+
+                // Update history
+                updateHistory(senderName, timestamp);
 
                 setTimeout(() => {
                     button.classList.remove('pulse');
-                }, 1000);
+                }, 900);
 
                 showNotification(indicator);
             }
@@ -400,12 +654,10 @@
                 const personANotifications = JSON.parse(localStorage.getItem('personAThinking') || '[]');
                 const personBNotifications = JSON.parse(localStorage.getItem('personBThinking') || '[]');
 
-                // Show unviewed notifications for Person B
                 if (personANotifications.some(n => !n.viewed)) {
                     showNotification(indicatorB);
                 }
 
-                // Show unviewed notifications for Person A
                 if (personBNotifications.some(n => !n.viewed)) {
                     showNotification(indicatorA);
                 }
@@ -419,16 +671,41 @@
                 hideNotification(indicator);
             }
 
-            // Add event listeners to buttons
+            // Reset all data
+            resetAll.addEventListener('click', () => {
+                localStorage.removeItem('personACount');
+                localStorage.removeItem('personBCount');
+                localStorage.removeItem('personAThinking');
+                localStorage.removeItem('personBThinking');
+                localStorage.removeItem('thoughtHistory');
+                localStorage.removeItem('personAName');
+                localStorage.removeItem('personBName');
+                personACount = 0;
+                personBCount = 0;
+                personAName = 'Person A';
+                personBName = 'Person B';
+                nameA.value = personAName;
+                nameB.value = personBName;
+                displayNameA.textContent = personAName;
+                displayNameB.textContent = personBName;
+                counterA.textContent = `${personAName} sent 0 thoughts`;
+                counterB.textContent = `${personBName} sent 0 thoughts`;
+                indicatorA.textContent = `${personAName} is thinking of you!`;
+                indicatorB.textContent = `${personBName} is thinking of you!`;
+                hideNotification(indicatorA);
+                hideNotification(indicatorB);
+                renderHistory();
+            });
+
+            // Add event listeners
             buttonA.addEventListener('click', () => {
-                handleButtonPress(buttonA, 'personAThinking', 'personACount', indicatorB, counterB, 'Person A');
+                handleButtonPress(buttonA, 'personAThinking', 'personACount', indicatorB, counterB, personAName, personBName);
             });
 
             buttonB.addEventListener('click', () => {
-                handleButtonPress(buttonB, 'personBThinking', 'personBCount', indicatorA, counterA, 'Person B');
+                handleButtonPress(buttonB, 'personBThinking', 'personBCount', indicatorA, counterA, personBName, personAName);
             });
 
-            // Add click listeners to indicators to mark as viewed
             indicatorA.addEventListener('click', () => {
                 markAsViewed('personBThinking', indicatorA);
             });
@@ -437,11 +714,18 @@
                 markAsViewed('personAThinking', indicatorB);
             });
 
-            // Check notifications every 500ms
-            setInterval(checkForNotifications, 500);
+            // Keyboard accessibility
+            buttonA.addEventListener('keypress', e => e.key === 'Enter' && buttonA.click());
+            buttonB.addEventListener('keypress', e => e.key === 'Enter' && buttonB.click());
+            indicatorA.addEventListener('keypress', e => e.key === 'Enter' && indicatorA.click());
+            indicatorB.addEventListener('keypress', e => e.key === 'Enter' && indicatorB.click());
+            toggleSound.addEventListener('keypress', e => e.key === 'Enter' && toggleSound.click());
+            resetAll.addEventListener('keypress', e => e.key === 'Enter' && resetAll.click());
 
-            // Initial check
+            // Initial setup
             checkForNotifications();
+            setInterval(checkForNotifications, 500);
+            renderHistory();
         });
     </script>
 </body>
