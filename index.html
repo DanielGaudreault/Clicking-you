@@ -5,242 +5,355 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thinking of You</title>
     <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --heart-color: #e84393;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--bg-gradient);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
-        
+
         .container {
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
             width: 100%;
-            max-width: 500px;
-            padding: 30px;
+            max-width: 550px;
+            padding: 40px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        
+
         h1 {
-            color: #6c5ce7;
-            margin-bottom: 10px;
-            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
-        
+
         .subtitle {
-            color: #636e72;
-            margin-bottom: 30px;
-            font-size: 18px;
+            color: #576574;
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+            line-height: 1.5;
         }
-        
+
         .buttons-container {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            margin-bottom: 30px;
+            display: grid;
+            gap: 30px;
+            margin-bottom: 32px;
         }
-        
+
         .button-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        
+
         .person-name {
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 20px;
             color: #2d3436;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
         }
-        
+
         .heart-button {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             border: none;
-            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            background: linear-gradient(135deg, #fd79a8 0%, var(--heart-color) 100%);
             color: white;
-            font-size: 16px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(232, 67, 147, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        .heart-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
         .heart-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(232, 67, 147, 0.4);
+            transform: scale(1.08);
+            box-shadow: 0 10px 25px rgba(232, 67, 147, 0.5);
         }
-        
+
+        .heart-button:hover::before {
+            opacity: 1;
+        }
+
         .heart-button:active {
             transform: scale(0.95);
         }
-        
+
         .heart-icon {
-            font-size: 40px;
+            font-size: 48px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
-        
+
         .indicator {
-            margin-top: 15px;
-            padding: 10px 20px;
-            border-radius: 30px;
-            background-color: #f8efba;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            margin-top: 16px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: #f8efba;
+            color: #2d3436;
             font-weight: 500;
+            font-size: 0.95rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
-        
+
         .indicator.active {
             opacity: 1;
+            transform: translateY(0);
         }
-        
+
         .instructions {
-            background-color: #dfe6e9;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
+            background: #f6f9fc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 24px;
             text-align: left;
+            font-size: 0.9rem;
         }
-        
+
         .instructions h3 {
-            color: #6c5ce7;
-            margin-bottom: 10px;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
         }
-        
+
         .instructions p {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: #2d3436;
+            line-height: 1.6;
         }
-        
+
         .pulse {
-            animation: pulse-animation 1.5s infinite;
+            animation: pulse-animation 1.2s ease-in-out infinite;
         }
-        
+
         @keyframes pulse-animation {
-            0% {
+            0%, 100% {
                 transform: scale(1);
                 box-shadow: 0 5px 15px rgba(232, 67, 147, 0.3);
             }
             50% {
-                transform: scale(1.05);
-                box-shadow: 0 8px 25px rgba(232, 67, 147, 0.5);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 5px 15px rgba(232, 67, 147, 0.3);
+                transform: scale(1.1);
+                box-shadow: 0 10px 25px rgba(232, 67, 147, 0.5);
             }
         }
-        
+
         .footer {
-            margin-top: 20px;
-            color: #636e72;
-            font-size: 14px;
+            margin-top: 24px;
+            color: #576574;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark {
+            --bg-gradient: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+        }
+
+        body.dark .container {
+            background: #2d3436;
+        }
+
+        body.dark .person-name,
+        body.dark .instructions p {
+            color: #dfe6e9;
+        }
+
+        body.dark .instructions {
+            background: #3b444b;
+        }
+
+        body.dark .footer {
+            color: #b2bec3;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px;
+            }
+
+            .heart-button {
+                width: 120px;
+                height: 120px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <button class="theme-toggle" id="themeToggle">🌙</button>
         <h1>Thinking of You</h1>
-        <p class="subtitle">Let someone know you're thinking about them</p>
-        
+        <p class="subtitle">Send a heartfelt message to someone special</p>
+
         <div class="buttons-container">
             <div class="button-wrapper">
                 <div class="person-name">Person A</div>
                 <button class="heart-button" id="buttonA">
                     <div class="heart-icon">❤️</div>
                 </button>
-                <div class="indicator" id="indicatorB">Person B is thinking of you!</div>
+                <div class="indicator" id="indicatorB">Person B is thinking of you! 💖</div>
             </div>
-            
+
             <div class="button-wrapper">
                 <div class="person-name">Person B</div>
                 <button class="heart-button" id="buttonB">
                     <div class="heart-icon">❤️</div>
                 </button>
-                <div class="indicator" id="indicatorA">Person A is thinking of you!</div>
+                <div class="indicator" id="indicatorA">Person A is thinking of you! 💖</div>
             </div>
         </div>
-        
+
         <div class="instructions">
-            <h3>How to Use</h3>
-            <p>1. When you think of the other person, press your button.</p>
-            <p>2. The other person will see a notification that you're thinking of them.</p>
-            <p>3. Notifications will disappear after 5 seconds.</p>
+            <h3>How It Works</h3>
+            <p>1. Press your button to let the other person know you're thinking of them.</p>
+            <p>2. They'll see a notification with a subtle animation and sound.</p>
+            <p>3. Notifications fade after 5 seconds.</p>
+            <p>4. Use two devices or browser tabs to test it out!</p>
         </div>
-        
+
         <div class="footer">
-            Open this page on two devices or browser tabs to test the functionality
+            Crafted with ❤️ by xAI | Open on multiple devices to share thoughts
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', () => {
             const buttonA = document.getElementById('buttonA');
             const buttonB = document.getElementById('buttonB');
             const indicatorA = document.getElementById('indicatorA');
             const indicatorB = document.getElementById('indicatorB');
-            
+            const themeToggle = document.getElementById('themeToggle');
+
+            // Audio for notification
+            const notificationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3');
+
+            // Theme toggle
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark');
+                themeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+                localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+            });
+
+            // Load saved theme
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark');
+                themeToggle.textContent = '☀️';
+            }
+
             // Function to show notification
             function showNotification(indicator) {
                 indicator.classList.add('active');
+                notificationSound.play().catch(() => console.log('Audio playback failed'));
                 setTimeout(() => {
                     indicator.classList.remove('active');
                 }, 5000);
             }
-            
+
             // Function to handle button press
             function handleButtonPress(button, storageKey, indicator) {
                 button.classList.add('pulse');
+                const timestamp = Date.now();
                 
-                // Save to localStorage to simulate sending to other side
-                localStorage.setItem(storageKey, Date.now().toString());
-                
+                // Save to localStorage with timestamp
+                localStorage.setItem(storageKey, JSON.stringify({
+                    timestamp,
+                    count: (JSON.parse(localStorage.getItem(storageKey))?.count || 0) + 1
+                }));
+
                 setTimeout(() => {
                     button.classList.remove('pulse');
-                }, 1500);
-                
+                }, 1200);
+
                 showNotification(indicator);
             }
-            
+
             // Add event listeners to buttons
             buttonA.addEventListener('click', () => {
                 handleButtonPress(buttonA, 'personAThinking', indicatorB);
             });
-            
+
             buttonB.addEventListener('click', () => {
                 handleButtonPress(buttonB, 'personBThinking', indicatorA);
             });
-            
-            // Check for notifications from the other side
+
+            // Check for notifications
             function checkForNotifications() {
-                // Check if Person A is thinking of Person B
-                if (localStorage.getItem('personAThinking')) {
+                const personAData = JSON.parse(localStorage.getItem('personAThinking'));
+                const personBData = JSON.parse(localStorage.getItem('personBThinking'));
+
+                if (personAData && Date.now() - personAData.timestamp < 10000) {
                     showNotification(indicatorB);
                     localStorage.removeItem('personAThinking');
                 }
-                
-                // Check if Person B is thinking of Person A
-                if (localStorage.getItem('personBThinking')) {
+
+                if (personBData && Date.now() - personBData.timestamp < 10000) {
                     showNotification(indicatorA);
                     localStorage.removeItem('personBThinking');
                 }
             }
-            
-            // Check for notifications every second
-            setInterval(checkForNotifications, 1000);
-            
+
+            // Check notifications every 500ms
+            setInterval(checkForNotifications, 500);
+
             // Initial check
             checkForNotifications();
         });
